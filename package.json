@@ -1,0 +1,35 @@
+{
+  "name": "op-transform",
+  "version": "1.0.0",
+  "author": "Pierre Donias <pierre.donias@gmail.com>",
+  "description": "A JavaScript library that implements Operational Transformation",
+  "license": "MIT",
+  "keywords": [
+    "operational transformation",
+    "collaborative",
+    "editing",
+    "document",
+    "concurrency"
+  ],
+  "type": "commonjs",
+  "homepage": "https://github.com/pdonias/op-transform",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pdonias/op-transform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pdonias/op-transform/issues"
+  },
+  "scripts": {
+    "build:client": "browserify -o dist/Client.js -e src/Client.js -s Client",
+    "build:server": "browserify -o dist/Server.js -e src/Server.js -s Server",
+    "test": "jest --silent"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "devDependencies": {
+    "browserify": "^17.0.0",
+    "jest": "^28.1.0"
+  }
+}
