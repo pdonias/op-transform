@@ -101,12 +101,14 @@ const client = new Client()
 client.onMessage = handleMessage
 ```
 
-- `onEvent({ type: String, status: String, op: Operation?, document: Element[] })`
+- `onEvent({ type: String, status: String, operation: Operation?, document: Element[] })`
 
-> The function that will be called when an event (either `reset` or `operation`) needs to be handled by the local editor.
+> The function that will be called when an event needs to be handled by the local editor.
 
 - type `reset`: the client is being reset with a fresh version of the document. The editor should be assigned the `document` parameter.
 - type `operation`: an Operation needs to be applied on the editor. The new document is also passed for convenience.
+- type `error`: a non-recoverable error occurred. The client is now `detached` and `reset()` must be called to resync.
+- type `info`: an internal state change occurred (e.g. transition to `sync`). No document change is needed.
 
 - `onMessage(clientToServerMessage: Message)`
 
@@ -114,7 +116,7 @@ client.onMessage = handleMessage
 
 When this function is called, send the message to the server and pass it to the `ClientInterface#message` method.
 
-- `areEqual(c1: Component, c2: Component): Boolean`
+- `areEqual(e1: Element, e2: Element): Boolean`
 
 > An optional function used to compare 2 elements of the Document
 
@@ -132,6 +134,10 @@ If your document contains elements that cannot be compared with `===`, then you 
 - `"pending"`: the client is currently awaiting for an operation it sent earlier. In the mean time, the client can receive and apply other operations from the server and it can buffer other operations from the client.
 - `"sync"`: the client is fully synchronized with the server.
 
+#### `static createOperation(): Operation`
+
+> Creates and returns a new empty Operation. Use this to build operations before passing them to `client.operation()`.
+
 #### `operation(operation: Operation)`
 
 > Apply a new operation on top of the current state.
@@ -145,6 +151,10 @@ If your document contains elements that cannot be compared with `===`, then you 
 > Request the full document from the server. Also used to initialize.
 
 This should trigger a `reset` event once the client has received the document from the server.
+
+#### `reverseOperation(n: Number = 1): Operation`
+
+> Returns a new Operation that, if applied, would undo the nth-most-recent operation (1-indexed). Throws if the history is too short.
 
 ### Server
 
@@ -249,7 +259,7 @@ socket.on('connection', () => {
 
   // Editor -> Client
   editor.on('keypress', (position, key) => {
-    const op = new Client.Operation()
+    const op = Client.createOperation()
 
     if (isBackSpace(key)) {
       op
@@ -258,7 +268,7 @@ socket.on('connection', () => {
     } else {
       op
         .ret(position)
-        .ins(key)
+        .ins([key])
     }
     op.ret(editor.contentLength - position)
 
