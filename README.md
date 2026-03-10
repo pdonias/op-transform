@@ -2,7 +2,7 @@ A JavaScript implementation of the Operational Transformation algorithm that let
 
 ## Introduction
 
-Your code needs to handle the editor in the client, the communication layer between the client and the server and, optionally, the storage of the document in the server. This library handles the synchronization and coherence of all the documents' versions (server and clients). Therefore, your code needs to communicate with in on 7 occasions:
+Your code needs to handle the editor in the client, the communication layer between the client and the server and, optionally, the storage of the document in the server. This library handles the synchronization and coherence of all the documents' versions (server and clients). Therefore, your code needs to communicate with it on 7 occasions:
 
 - In the client:
   - `Client#operation`: when you tell the engine that the document changed in the editor (e.g.: user input)

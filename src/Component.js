@@ -22,7 +22,7 @@ module.exports = class Component {
     }
     if (type === 'del' && !Array.isArray(value)) {
       throw new Error(
-        'An delete component requires a string value. Got: ' + value
+        'A delete component requires a string value. Got: ' + value
       )
     }
 

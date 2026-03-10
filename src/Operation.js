@@ -26,7 +26,7 @@ module.exports = class Operation {
       )
     }
     if (author != null && typeof author !== 'string') {
-      throw new Error('An Operation requires a author string. Got: ' + author)
+      throw new Error('An Operation requires an author string. Got: ' + author)
     }
     if (parent != null && typeof parent !== 'string') {
       throw new Error('An Operation requires a parent string. Got: ' + parent)
